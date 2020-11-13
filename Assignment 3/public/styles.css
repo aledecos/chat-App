@@ -1,0 +1,104 @@
+* { 
+    box-sizing: border-box; 
+}
+h1 {
+    display: inline;
+}
+html{
+    height: 100%;
+}
+body {    
+    font: 15px Helvetica, Arial;
+    max-width: 960px;
+    margin: auto;
+    height: 100%;    
+}
+#border {
+    background-color: rgb(223, 223, 223);
+    height: 100%;
+    border-style: dotted;
+}
+#header {
+    height: 10%;
+    border-style: dotted;
+    text-align: center;
+}
+.hello {
+    font-weight: bold;
+    text-align: center;
+}
+/* Two Columns */
+section {
+    height: 85%;  
+    border-style: dotted;
+}
+nav {
+    height: 100%;
+}
+nav ul{
+    height: 100%;
+    width:100%;
+    overflow:hidden; 
+    overflow-y:scroll;
+    vertical-align: bottom;
+    
+    list-style-type: none; 
+    margin: 0; padding: 0; 
+    overflow:hidden; 
+    overflow-y:scroll;
+    bottom: 0;
+}
+
+nav li{
+    padding: 5px 10px; 
+    vertical-align: bottom;
+}
+nav li:nth-child(odd){
+    background: rgb(150, 144, 177); 
+}
+
+
+#incoming {
+    background: rgb(127, 121, 168); 
+    float: left;
+    height: inherit;  
+    width: 66.66%;
+    border-style: dotted;
+}
+
+
+#users {
+    background: rgb(245, 245, 247); 
+    float: left;
+    height: inherit;  
+    width: 33.33%;
+    border-style: dotted;
+    
+}
+#names
+{
+    list-style-type: none;
+}
+/* Clear floats after the columns */
+section:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+#send {
+    height: 10%;
+}
+
+form { 
+    display: flex;
+    background: #000; 
+    padding: 3px; 
+    height: 10;
+}
+form input { 
+    border: 0; padding: 10px; width: 100%; margin-right: 0.5%; 
+}
+form button { 
+    width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; 
+}

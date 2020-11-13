@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Junhee Chat App</title>
+    <meta charset="UTF-8">
+    <base href="/">
+    <link href="styles.css" rel="stylesheet" type="text/css" />
+  </head>
+
+
+  <body>
+    <div id="border">
+      <div id="header">
+        <h1 id="hello">Hello User: </h1> 
+        <h1 id="userName"></h1>
+      </div>
+      <section>
+        <div id="incoming">
+          <nav id = scroll>
+            <ul id="messages"></ul>
+          </nav>
+        </div>
+
+        <div id="users">
+          <ul id="names"></ul>
+        </div>
+      </section>
+      
+
+      <div id="send">
+        <form action="" id = "button">
+          <input id="m" autocomplete="off" /><button>Send</button>
+        </form>
+      </div>
+
+      
+      <script src="/socket.io/socket.io.js"></script>
+      <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+      <script>
+          $(function () {
+              var socket = io();
+              socket.emit('set', 'is_it_ok', function (response) {
+
+                  let recieve = JSON.parse(response);
+                  document.getElementById("userName").innerHTML = recieve.username;
+                  
+                  console.log(JSON.parse(response));
+              });
+
+              $('#button').submit(function(e) {
+                  e.preventDefault(); // prevents page reloading
+                  let send = {
+                    message: $('#m').val(),
+                    userName: document.getElementById("userName").innerHTML
+                  };
+                  socket.emit('chat message', JSON.stringify(send));
+                  $('#m').val('');
+                  return false;
+              });
+              
+              socket.on('chat message', function(msg){
+                let recieve = JSON.parse(msg);
+
+
+                let messages = [];
+                let currentUser = document.getElementById("userName").innerHTML;
+                recieve.forEach(message => {
+
+                  let nameOfUser = message.userdata.username;
+                  // console.log(nameOfUser + " herer");
+                  // console.log(currentUser+ " herer") ;
+                  // console.log("Equal" + nameOfUser == currentUser)
+                  //bold if this is current user
+                  if(String(nameOfUser) === String(currentUser))
+                  {
+                    console.log("inside") ;
+                    messages.push(
+                      $('<li style="font-weight:bold">').append(
+                        $('<p>').append(
+                          message.ts + " " + 
+                          nameOfUser.fontcolor(message.userdata.color) + " " + 
+                          message.mes.replace(":)", "😁").replace(":(", "🙁").replace(":o", "😲")
+                        )
+                      )
+                    );
+                  }
+                  //other users
+                  else
+                  {
+                    messages.push(
+                      $('<li>').append(
+                        message.ts + " " + 
+                        nameOfUser.fontcolor(message.userdata.color) + " " + 
+                        message.mes.replace(":)", "😁").replace(":(", "🙁").replace(":o", "😲")
+                      )
+                    );
+                  }
+                });
+
+                $('#messages').empty().append(messages);
+
+
+                //$('#messages').append($('<li>').text(recieve.mes));
+              });
+
+              socket.on('user update', function(users){
+                let using = JSON.parse(users);
+                let arr = using.user;
+                console.log("change");
+                $("#names").empty();
+                for (let i = 0; i < arr.length; i++){
+                  console.log(arr[i].username);
+                  $("#names").append($('<li>').text(arr[i].username));
+                }
+                
+              });
+
+              socket.on('user name', function(msg){
+                //console.log("here");
+                document.getElementById("userName").innerHTML = msg;
+              });
+
+          });
+      </script>
+    </div>
+  </body>
+</html>
