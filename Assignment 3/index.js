@@ -25,7 +25,6 @@ io.on('connection', (socket) => {
         let id = crypto.randomBytes(3).toString("hex");
         let single = {
             username: id,
-            online: true,
             color: "#000000" // default color: black
         };
         users.push(single);
@@ -112,7 +111,6 @@ io.on('connection', (socket) => {
             }
             else if(command === "/color")
             {
-                
                 let match = XRegExp('^[0-9A-F]{6}');
                 if(!value)
                 {
@@ -121,8 +119,11 @@ io.on('connection', (socket) => {
                 else if(match.exec(value) === null)
                 {
                     mes = value + " not valid hex (no #, 0-9 or A-F)";
+                    
+                }
+                else{
                     const index = users.findIndex(x => x.username === socket.nickname);
-                    users[index].color = ''+value;
+                    users[index].color = '#'+value;
                     console.log(users[index]);
                 }
             }
